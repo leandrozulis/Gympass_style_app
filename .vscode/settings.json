@@ -1,9 +1,12 @@
 {
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
-      "source.fixAll": true,
-      "source.fixAll.eslint": true,
+    "source.fixAll": true,
+    "source.fixAll.eslint": true,
   },
   "eslint.format.enable": true,
-  "files.autoSave": "onFocusChange"
+  "files.autoSave": "onFocusChange",
+  "[prisma]": {
+    "editor.formatOnSave": true
+  }
 }
