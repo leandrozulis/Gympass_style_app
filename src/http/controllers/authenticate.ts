@@ -7,7 +7,7 @@ export async function authenticate(request: FastifyRequest, reply: FastifyReply)
 
   const authenticateSchemaBody = z.object({
     email: z.string(),
-    password: z.string()
+    password: z.string().min(6)
   });
 
   const { email, password } = authenticateSchemaBody.parse(request.body);
