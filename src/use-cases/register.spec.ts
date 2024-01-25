@@ -1,16 +1,23 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { RegisterUseCase } from './register';
 import { compare } from 'bcryptjs';
 import { InMemoryUsersRepository } from '@/repositories/in-memory/in-memory-users-repository';
 import { UserAlreadyExistsError } from './errors/user-already-exists-error';
 
+let inMemory: InMemoryUsersRepository;
+let sut: RegisterUseCase;
+
+
 describe('Register Use Case', () => {
 
-  it('Validando se o cadastro funciona', async () => {
-    const usersRepository = new InMemoryUsersRepository();
-    const register = new RegisterUseCase(usersRepository);
+  beforeEach(() => {
+    inMemory = new InMemoryUsersRepository();
+    sut = new RegisterUseCase(inMemory);
+  });
 
-    const { user } = await register.execute({
+  it('Validando se o cadastro funciona', async () => {
+
+    const { user } = await sut.execute({
       name: 'Leandro',
       email: 'leandro@teste.com',
       password: '123456'
@@ -21,10 +28,8 @@ describe('Register Use Case', () => {
   });
 
   it('Validando se a senha gera um hash', async () => {
-    const usersRepository = new InMemoryUsersRepository();
-    const register = new RegisterUseCase(usersRepository);
 
-    const { user } = await register.execute({
+    const { user } = await sut.execute({
       name: 'Leandro',
       email: 'leandro@teste.com',
       password: '123456'
@@ -40,19 +45,17 @@ describe('Register Use Case', () => {
   });
 
   it('Validando se já existe um e-mail', async () => {
-    const usersRepository = new InMemoryUsersRepository();
-    const register = new RegisterUseCase(usersRepository);
 
     const email = 'leandro@teste.com';
 
-    await register.execute({
+    await sut.execute({
       name: 'Leandro',
       email: email,
       password: '123456'
     });
 
     expect(() => 
-      register.execute({
+      sut.execute({
         name: 'Leandro',
         email,
         password: '123456'
