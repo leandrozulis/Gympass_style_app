@@ -21,8 +21,8 @@ describe('Check-in Use Case', () => {
       title: 'JS Node',
       description: '',
       phone: '',
-      latitude: new Decimal(0),
-      longitude: new Decimal(0)
+      latitude: new Decimal(-23.4216355),
+      longitude: new Decimal(-51.8628502)
     });
 
     vi.useFakeTimers();
@@ -37,8 +37,8 @@ describe('Check-in Use Case', () => {
     const { checkIn } = await sut.execute({
       gymId: 'gym-1',
       userId: 'user-1',
-      latitude: -23.4216355,
-      longitude: -51.8628502
+      userLatitude: -23.4216355,
+      userLongitude: -51.8628502
     });
 
     expect(checkIn.id).toEqual(expect.any(String)); 
@@ -52,16 +52,16 @@ describe('Check-in Use Case', () => {
     await sut.execute({
       gymId: 'gym-1',
       userId: 'user-1',
-      latitude: -23.4216355,
-      longitude: -51.8628502
+      userLatitude: -23.4216355,
+      userLongitude: -51.8628502
     });
 
     await expect(() => 
       sut.execute({
         gymId: 'gym-1',
         userId: 'user-1',
-        latitude: -23.4216355,
-        longitude: -51.8628502
+        userLatitude: -23.4216355,
+        userLongitude: -51.8628502
       })
     ).rejects.toBeInstanceOf(Error);
   });
@@ -73,8 +73,8 @@ describe('Check-in Use Case', () => {
     await sut.execute({
       gymId: 'gym-1',
       userId: 'user-1',
-      latitude: -23.4216355,
-      longitude: -51.8628502
+      userLatitude: -23.4216355,
+      userLongitude: -51.8628502
     });
 
     vi.setSystemTime(new Date(2022, 0, 21, 8, 0, 0));
@@ -83,13 +83,32 @@ describe('Check-in Use Case', () => {
     const {checkIn} = await sut.execute({
       gymId: 'gym-1',
       userId: 'user-1',
-      latitude: -23.4216355,
-      longitude: -51.8628502
+      userLatitude: -23.4216355,
+      userLongitude: -51.8628502
     });
 
-    //-23.4216355,,14z
-
     expect(checkIn.id).toEqual(expect.any(String)); 
+  });
+
+  it('Should not be able to check in on distant gym', async () => {
+
+    inMemoryGyms.items.push({
+      id: 'gym-2',
+      title: 'JS Node',
+      description: '',
+      phone: '',
+      latitude: new Decimal(-23.4316091),
+      longitude: new Decimal(-51.9430844)
+    });
+
+    expect(async () => 
+      await sut.execute({
+        gymId: 'gym-2',
+        userId: 'user-1',
+        userLatitude: -23.4216355,
+        userLongitude: -51.8628502
+      })
+    ).rejects.toBeInstanceOf(Error);
   });
 
 });
