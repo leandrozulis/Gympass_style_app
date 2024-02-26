@@ -45,7 +45,17 @@ describe('Search Gyms Use Case', () => {
 
   it.skip('Should be able to fetch paginated gyms search', async () => {
 
-    for (let i = 1; i <= 22; i++) {
+    for (let i = 1; i <= 20; i++) {
+      await inMemory.create({
+        title: `TypeScript Gym ${i}`,
+        description: '',
+        phone: '',
+        latitude: -23.4216355,
+        longitude: -51.8628502
+      });
+    }
+
+    for (let i = 21; i <= 22; i++) {
       await inMemory.create({
         title: `JavaScript Gym ${i}`,
         description: '',
