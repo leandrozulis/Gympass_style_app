@@ -13,7 +13,7 @@ describe('Search Gym (e2e)', () => {
     await app.close();
   });
 
-  it.skip('Shoul be able to search a gym', async () => {
+  it('Shoul be able to search a gym', async () => {
 
     const { token } = await createAndAuthenticateUser(app);
 
